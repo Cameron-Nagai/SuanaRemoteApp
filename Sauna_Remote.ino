@@ -16,7 +16,7 @@
 #define PIN 22
 
 #define BUTTONPIN 23
-
+#define ONBOARD_LED  2
 
 const char* ssid = "Sue Associates";
 const char* password = "Do you know the way to mayan warrior?";
@@ -37,6 +37,7 @@ String outputsState;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(ONBOARD_LED,OUTPUT);
   pinMode(BUTTONPIN, INPUT);
   pinMode(PIN, OUTPUT);
   WiFi.begin(ssid, password);
@@ -48,6 +49,10 @@ void setup() {
   Serial.println("");
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
+
+  digitalWrite(ONBOARD_LED,HIGH);
+  delay(200);
+  digitalWrite(ONBOARD_LED,LOW);
 }
 
 void loop() {
@@ -87,6 +92,7 @@ void loop() {
         onSuana = false;
       }
       if (onSuana) {
+        digitalWrite(ONBOARD_LED,HIGH);
         Serial.println("on suana is true");
         digitalWrite(PIN, HIGH);
 
@@ -95,6 +101,7 @@ void loop() {
       else {
         Serial.println("on suana is false");
         digitalWrite(PIN, LOW);
+        digitalWrite(ONBOARD_LED,LOW);
       }
     
 //      for (int i = 0; i < keys.length(); i++) {
@@ -128,7 +135,7 @@ void loop() {
         onSuana = false;
         httpPOSTRequest(serverName, false);
       }
-   delay(400);
+   delay(200);
     }
 
      if (onSuana) {
