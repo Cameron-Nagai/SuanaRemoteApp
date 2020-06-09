@@ -50,6 +50,7 @@ void setup() {
   Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
 
+  //This blinks the onboard led so we know its connected to wifi
   digitalWrite(ONBOARD_LED,HIGH);
   delay(200);
   digitalWrite(ONBOARD_LED,LOW);
@@ -58,10 +59,9 @@ void setup() {
 void loop() {
   unsigned long currentMillis = millis();
 
-//  Serial.println("before time if");
+
   
   if(currentMillis - previousMillis >= interval) {
-//      Serial.println("beginning of time if");
      // Check WiFi connection status
     if(WiFi.status()== WL_CONNECTED ){ 
       Serial.println("wifi connected");
@@ -104,15 +104,6 @@ void loop() {
         digitalWrite(ONBOARD_LED,LOW);
       }
     
-//      for (int i = 0; i < keys.length(); i++) {
-//        JSONVar value = myObject[keys[i]];
-//        Serial.print("GPIO: ");
-//        Serial.print(keys[i]);
-//        Serial.print(" - SET to: ");
-//        Serial.println(value);
-//        pinMode(atoi(keys[i]), OUTPUT);
-//        digitalWrite(atoi(keys[i]), atoi(value));
-//      }
       // save the last HTTP GET Request
       previousMillis = currentMillis;
     }
@@ -124,7 +115,7 @@ void loop() {
    buttonState = digitalRead(BUTTONPIN);
 
    
-   if (buttonState != lastButtonState) {
+  if (buttonState != lastButtonState) {
     Serial.println("BUTTON IS PUSHED");
     if (buttonState == HIGH) {
       if (onSuana == false) {
@@ -150,36 +141,20 @@ void loop() {
 void httpPOSTRequest(const char* serverName, bool onOff) {
   HTTPClient http;
       
-      // Your Domain name with URL path or IP address with path
-      http.begin(serverName);
+ // Your Domain name with URL path or IP address with path
+ http.begin(serverName);
 
-      // Specify content-type header
-//      http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-      // Data to send with HTTP POST
-//      String httpRequestData = "api_key=tPmAT5Ab3j7F9&sensor=BME280&value1=24.25&value2=49.54&value3=1005.14";           
-      // Send HTTP POST request
-//      int httpResponseCode = http.POST(httpRequestData);
-      
-      // If you need an HTTP request with a content type: application/json, use the following:
-      http.addHeader("Content-Type", "application/json");
-      if (onOff) {
-        int httpResponseCode = http.POST("{\"on\":true}"); //http.POST(“{\”api_key\”:\”tPmAT5Ab3j7F9\”,\”sensor\”:\”BME280\”,\”value1\”:variable,\”value2\”:variable,\”value3\”:variable}”);  
+  // If you need an HTTP request with a content type: application/json, use the following:
+  http.addHeader("Content-Type", "application/json");
+  if (onOff) {
+    int httpResponseCode = http.POST("{\"on\":true}"); //http.POST(“{\”api_key\”:\”tPmAT5Ab3j7F9\”,\”sensor\”:\”BME280\”,\”value1\”:variable,\”value2\”:variable,\”value3\”:variable}”);  
       }
-      else {
-        int httpResponseCode = http.POST("{\"on\":false}");
+    else {
+    int httpResponseCode = http.POST("{\"on\":false}");
       }
-        
-      // If you need an HTTP request with a content type: text/plain
-      //http.addHeader("Content-Type", "text/plain");
-      //int httpResponseCode = http.POST("Hello, World!");
-     
-//      Serial.print("HTTP Response code: ");
-//      Serial.println(httpResponseCode);
-
-      
-        
-      // Free resources
-      http.end();
+            
+    // Free resources
+    http.end();
     
 
 
@@ -201,11 +176,11 @@ String httpGETRequest(const char* serverName) {
     Serial.print("HTTP Response code: ");
     Serial.println(httpResponseCode);
     payload = http.getString();
-  }
+    }
   else {
     Serial.print("Error code: ");
     Serial.println(httpResponseCode);
-  }
+    }
   // Free resources
   http.end();
 
